@@ -1,9 +1,7 @@
-To design a description for the authentication API, let's outline the typical endpoints and functionalities commonly involved. This description will cover user registration, login, and any related processes like email verification, password reset, etc.
 
-### Authentication API Overview
+### CLEAN CONNECT Authentication API Overview
 
 #### Base URL
-
 ```
 http://localhost:8000/api
 ```
@@ -11,11 +9,12 @@ http://localhost:8000/api
 #### Endpoints
 
 1. **User Registration**
-   - **Endpoint**: `/auth/register`
+   - **Endpoint**: `/post/register/user`
    - **Method**: `POST`
-   - **Description**: Registers a new user with the system.
+   - **Description**: Registers a new user, sends a verification email, and saves the user's information.
+   - **Middleware**: `registrationMiddleware`
+   - **Controller**: `registrationController`
    - **Request Body**:
-
      ```json
      {
        "fullName": "string",
@@ -25,110 +24,101 @@ http://localhost:8000/api
        "role": "string"  // "admin", "provider", "customer"
      }
      ```
-
    - **Responses**:
-     - `201 Created`: User successfully registered.
-     - `400 Bad Request`: Validation error or missing parameters.
+     - `201 Created`: User successfully registered, and a verification email was sent.
+     - `500 Internal Server Error`: Various Firebase authentication errors, such as invalid email, email already exists, weak password, network issues, or other unknown errors.
 
 2. **User Login**
-   - **Endpoint**: `/auth/login`
+   - **Endpoint**: `/post/login/user`
    - **Method**: `POST`
-   - **Description**: Authenticates a user and provides a token.
+   - **Description**: Authenticates a user and provides a session if credentials are valid.
+   - **Middleware**: `loginMiddleware`
+   - **Controller**: `login`
    - **Request Body**:
-
      ```json
      {
        "email": "string",
        "password": "string"
      }
      ```
-
    - **Responses**:
-     - `200 OK`: Returns a token and user details.
-     - `401 Unauthorized`: Incorrect email or password.
+     - `200 OK`: User successfully logged in and session created.
+     - `401 Unauthorized`: Authentication failed (incorrect credentials).
+     - `422 Unprocessable Entity`: Email not verified.
 
 3. **Email Verification**
-   - **Endpoint**: `/auth/verify-email`
+   - **Endpoint**: `/get/verify/email`
    - **Method**: `GET`
-   - **Description**: Verifies the user's email address using a verification link.
+   - **Description**: Handles email verification and password reset processes based on the mode.
+   - **Controller**: `verifyEmail`
    - **Query Parameters**:
-     - `mode`: `"verifyEmail"`
+     - `mode`: `"verifyEmail" | "resetPassword"`
      - `oobCode`: `string`
    - **Responses**:
-     - `200 OK`: Email successfully verified.
-     - `400 Bad Request`: Invalid or expired verification code.
+     - **For `verifyEmail` mode**:
+       - `200 OK`: Email successfully verified, and the user is notified.
+       - `400 Bad Request`: Missing required parameters or invalid request.
+       - `500 Internal Server Error`: Error occurred during verification.
+     - **For `resetPassword` mode**:
+       - `302 Found`: Redirects the user to the front-end route for password reset, including the `oobCode` as a query parameter.
+       - `400 Bad Request`: Missing required parameters or invalid request.
+       - `500 Internal Server Error`: Error occurred during the password reset process.
 
-4. **Password Reset Request**
-   - **Endpoint**: `/auth/password-reset-request`
+4. **Request Password Reset Email**
+   - **Endpoint**: `/post/send/reset/email`
    - **Method**: `POST`
-   - **Description**: Initiates a password reset process by sending a reset email.
+   - **Description**: Sends an email with a password reset link.
+   - **Middleware**: `resetEmailMiddleware`
+   - **Controller**: `sendResetEmail`
    - **Request Body**:
-
      ```json
      {
        "email": "string"
      }
      ```
-
    - **Responses**:
-     - `200 OK`: Reset email sent.
-     - `404 Not Found`: User not found.
+     - `200 OK`: A reset email has been sent if an account exists for the provided email.
+     - `500 Internal Server Error`: Error occurred while sending the reset email.
 
 5. **Password Reset**
-   - **Endpoint**: `/auth/password-reset`
+   - **Endpoint**: `/post/reset/password`
    - **Method**: `POST`
-   - **Description**: Resets the user's password using the reset code sent to their email.
+   - **Description**: Resets the user's password using a confirmation code and a new password.
+   - **Middleware**: `resetPasswordMiddleware`
+   - **Controller**: `resetPassword`
    - **Request Body**:
-
      ```json
      {
-       "oobCode": "string",
+       "confirmationCode": "string",
        "newPassword": "string"
      }
      ```
-
    - **Responses**:
      - `200 OK`: Password successfully reset.
-     - `400 Bad Request`: Invalid or expired reset code.
+     - `500 Internal Server Error`: Error occurred during the password reset process.
+
+6. **User Sign-Out**
+   - **Endpoint**: `/user/sign-out`
+   - **Method**: `GET`
+   - **Description**: Signs out the currently authenticated user and destroys their session.
+   - **Middleware**: `isAuthenticated`
+   - **Controller**: `signOutUser`
+   - **Responses**:
+     - `200 OK`: User successfully signed out.
+     - `500 Internal Server Error`: Error occurred while signing out.
+
+7. **User Dashboard**
+   - **Endpoint**: `/get/user/dashboard`
+   - **Method**: `GET`
+   - **Description**: Retrieves the dashboard data for the authenticated user.
+   - **Middleware**: `isAuthenticated`
+   - **Controller**: `dashboardIndex`
+   - **Responses**:
+     - `200 OK`: Returns dashboard data.
+     - `401 Unauthorized`: User not authenticated.
 
 #### Security
-
-- **Authentication**: The API uses token-based authentication for protected routes. Upon successful login, the API returns a token, which must be included in the `Authorization` header for subsequent requests:
-
-  ```
-  Authorization: Bearer <token>
-  ```
+- **Authentication**: The API uses Firebase for authentication, and session management is implemented for user sessions. Middleware checks for authentication status.
 
 #### Error Handling
-
-- The API provides detailed error messages and status codes to help identify issues with requests.
-
-### Usage Example
-
-To authenticate a user, you would send a `POST` request to the `/auth/login` endpoint with the user's email and password. Upon successful authentication, the API responds with a JSON object containing the token and user details.
-
-```http
-POST /api/auth/login
-Content-Type: application/json
-
-{
-  "email": "user@example.com",
-  "password": "userpassword"
-}
-```
-
-**Response:**
-
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR...",
-  "user": {
-    "id": "123",
-    "fullName": "John Doe",
-    "email": "user@example.com",
-    "role": "customer"
-  }
-}
-```
-
-This description provides an overview of the authentication API, including the necessary endpoints, methods, request and response formats, and security considerations. Feel free to customize the details according to your specific implementation.
+- **Structured Error Responses**: The API provides structured error responses with appropriate HTTP status codes and messages, including handling Firebase-specific errors and general errors. Errors are logged using `Winston` for tracking and debugging purposes.
