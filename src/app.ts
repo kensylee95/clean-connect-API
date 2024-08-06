@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
-const config = require('../config'); // Adjust the path as needed
+const config = require('./config'); // Adjust the path as needed
 const importRouter = require("./routes/routes");
 
 
