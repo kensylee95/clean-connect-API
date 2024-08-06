@@ -1,15 +1,14 @@
-
-import express, { NextFunction } from "express";
+import express from "express";
 const app = express();
 import session from 'express-session';
-import { applicationPort } from "../config";
+import { applicationPort, AppSecretKey } from "../config";
 import router from "./routes/routes";
-import { Request, Response,} from "express";
 
 
 // Set up express-session middleware
 app.use(session({
-    secret: 'your_secret_key',  // Change this to a secure key
+  //Session secret key
+    secret: AppSecretKey,  // Change this to a secure key
     resave: false,
     saveUninitialized: false,
     cookie: {

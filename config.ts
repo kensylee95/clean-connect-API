@@ -21,13 +21,14 @@ const {
   MESSAGE_SENDERID,
   APPID,
   PORT,
-  ROOTURL
+  ROOTURL,
+  APPSECRETKEY,
 } = process.env;
 
 // Define the application's configuration
 export const applicationPort: number|null|undefined = Number(PORT);
 export const applicationRootUrl: string = ROOTURL|| "localhost:3000";
-
+export const AppSecretKey:string = APPSECRETKEY||"";
 export const firebaseConfig: FirebaseConfig = {
   apiKey: API_KEY || '',
   authDomain: AUTH_DOMAIN || '',
