@@ -1,8 +1,12 @@
 const express = require('express');
 const app = express();
-import session = require('express-session');
-import { applicationPort, AppSecretKey } from "../config";
-import router from "./routes/routes";
+const session = require('express-session');
+const config = require('./config'); // Adjust the path as needed
+const importRouter = require("./routes/routes");
+
+
+const { applicationPort, AppSecretKey } = config;
+const {router} = importRouter; ;
 
 
 // Set up express-session middleware
