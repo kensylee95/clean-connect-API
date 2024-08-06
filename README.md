@@ -12,8 +12,6 @@ http://localhost:8000/api
    - **Endpoint**: `/post/register/user`
    - **Method**: `POST`
    - **Description**: Registers a new user, sends a verification email, and saves the user's information.
-   - **Middleware**: `registrationMiddleware`
-   - **Controller**: `registrationController`
    - **Request Body**:
      ```json
      {
@@ -32,8 +30,6 @@ http://localhost:8000/api
    - **Endpoint**: `/post/login/user`
    - **Method**: `POST`
    - **Description**: Authenticates a user and provides a session if credentials are valid.
-   - **Middleware**: `loginMiddleware`
-   - **Controller**: `login`
    - **Request Body**:
      ```json
      {
@@ -50,7 +46,6 @@ http://localhost:8000/api
    - **Endpoint**: `/get/verify/email`
    - **Method**: `GET`
    - **Description**: Handles email verification and password reset processes based on the mode.
-   - **Controller**: `verifyEmail`
    - **Query Parameters**:
      - `mode`: `"verifyEmail" | "resetPassword"`
      - `oobCode`: `string`
@@ -68,8 +63,6 @@ http://localhost:8000/api
    - **Endpoint**: `/post/send/reset/email`
    - **Method**: `POST`
    - **Description**: Sends an email with a password reset link.
-   - **Middleware**: `resetEmailMiddleware`
-   - **Controller**: `sendResetEmail`
    - **Request Body**:
      ```json
      {
@@ -84,8 +77,6 @@ http://localhost:8000/api
    - **Endpoint**: `/post/reset/password`
    - **Method**: `POST`
    - **Description**: Resets the user's password using a confirmation code and a new password.
-   - **Middleware**: `resetPasswordMiddleware`
-   - **Controller**: `resetPassword`
    - **Request Body**:
      ```json
      {
@@ -101,8 +92,6 @@ http://localhost:8000/api
    - **Endpoint**: `/user/sign-out`
    - **Method**: `GET`
    - **Description**: Signs out the currently authenticated user and destroys their session.
-   - **Middleware**: `isAuthenticated`
-   - **Controller**: `signOutUser`
    - **Responses**:
      - `200 OK`: User successfully signed out.
      - `500 Internal Server Error`: Error occurred while signing out.
@@ -111,14 +100,12 @@ http://localhost:8000/api
    - **Endpoint**: `/get/user/dashboard`
    - **Method**: `GET`
    - **Description**: Retrieves the dashboard data for the authenticated user.
-   - **Middleware**: `isAuthenticated`
-   - **Controller**: `dashboardIndex`
    - **Responses**:
      - `200 OK`: Returns dashboard data.
      - `401 Unauthorized`: User not authenticated.
 
 #### Security
-- **Authentication**: The API uses Firebase for authentication, and session management is implemented for user sessions. Middleware checks for authentication status.
+- **Authentication**: The API uses Firebase for authentication, and session management is implemented for user sessions. 
 
 #### Error Handling
 - **Structured Error Responses**: The API provides structured error responses with appropriate HTTP status codes and messages, including handling Firebase-specific errors and general errors. Errors are logged using `Winston` for tracking and debugging purposes.
