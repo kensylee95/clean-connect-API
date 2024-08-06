@@ -1,4 +1,4 @@
-import express from "express";
+const express = require('express');
 const app = express();
 import session from 'express-session';
 import { applicationPort, AppSecretKey } from "../config";
