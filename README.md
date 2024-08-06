@@ -3,7 +3,7 @@
 
 #### Base URL
 ```
-http://localhost:8000/api
+https://cleanconnectapi.onrender.com/api
 ```
 
 #### Endpoints
