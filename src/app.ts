@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-import session from 'express-session';
+import session = require('express-session');
 import { applicationPort, AppSecretKey } from "../config";
 import router from "./routes/routes";
 
