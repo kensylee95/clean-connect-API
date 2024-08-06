@@ -3,13 +3,16 @@ import { Router } from "express";
 import express from 'express';
 import registrationController from '../controllers/auth/registrationController';
 import {login, signOutUser} from "../controllers/auth/loginController";
-import { resetPassword, sendResetEmail, verifyEmail,} from "../controllers/auth/resetEmailController";
 import { dashboardIndex } from "../controllers/internalControllers/dashboardController";
 import isAuthenticated from "../middlewares/auth/authenticationMiddleware";
 import registrationMiddleware from "../middlewares/auth/registrationMiddleware";
 import loginMiddleware from "../middlewares/auth/loginMiddleware";
 import resetEmailMiddleware from "../middlewares/auth/resetEmailMidleware";
 import resetPasswordMiddleware from "../middlewares/auth/resetPasswordMiddleware";
+import resetPassword from "../controllers/auth/resetPasswordController";
+import sendResetEmail from "../controllers/auth/sendResetEmailController";
+import verifyEmail from "../controllers/auth/emailVerificationController";
+import authEmailResponseMiddleware from "../middlewares/auth/authEmailResponseMiddleware";
 const router:Router = express.Router();
 
 //check if email already exists
@@ -22,7 +25,7 @@ router.post('/post/login/user', loginMiddleware, login);
 //Request reset email via this end point
 router.post('/post/send/reset/email', resetEmailMiddleware, sendResetEmail);
 //get verification link when user clicks link from email
-router.get('/get/verify/user/:mode}/:oobCode',  verifyEmail);
+router.get('/get/verify/email',  verifyEmail);
 //confirm verification code and reset password
 router.post('/post/reset/password', resetPasswordMiddleware, resetPassword);
 //sign out the current authenticated user

@@ -1,5 +1,5 @@
 
-import { Request, Response, } from "express";
+import { Request, response, Response, } from "express";
 import UserModel from "../../models/userModel";
 import { getAuth, signOut } from "firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -16,6 +16,9 @@ export async function login(
     const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password!);
     //get authenticated user
     const authenticatedUser = userCredential.user;
+    if(authenticatedUser.emailVerified==false){
+      return res.status(422).send({message:"Your email has not been verified, Please verify your email address to continue"})
+    }
     //fetch firestore DB records of authenticated user 
     const userModel = await getUserByIdRepository(authenticatedUser.uid);
     // Save authenticated user model in session.
