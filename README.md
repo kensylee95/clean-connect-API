@@ -1,5 +1,5 @@
 
-### CLEAN CONNECT Authentication API Overview
+### CEAN CONNECT Authentication API Overview
 
 #### Base URL
 ```
@@ -51,8 +51,8 @@ http://localhost:8000/api
      - `oobCode`: `string`
    - **Responses**:
      - **For `verifyEmail` mode**:
-       - `200 OK`: Email successfully verified, and the user is notified.
-       - `400 Bad Request`: Missing required parameters or invalid request.
+       - `302 Found`: Redirects to the front-end route indicating successful verification with `verified=true` as a query parameter.
+       - `400 Bad Request`: Invalid or expired verification code.
        - `500 Internal Server Error`: Error occurred during verification.
      - **For `resetPassword` mode**:
        - `302 Found`: Redirects the user to the front-end route for password reset, including the `oobCode` as a query parameter.
@@ -109,3 +109,4 @@ http://localhost:8000/api
 
 #### Error Handling
 - **Structured Error Responses**: The API provides structured error responses with appropriate HTTP status codes and messages, including handling Firebase-specific errors and general errors. Errors are logged using `Winston` for tracking and debugging purposes.
+
