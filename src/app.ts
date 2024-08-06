@@ -1,3 +1,5 @@
+import { AppSecretKey } from "./config";
+
 const express = require('express');
 const app = express();
 const session = require('express-session');
@@ -5,7 +7,7 @@ const config = require('./config'); // Adjust the path as needed
 const importRouter = require("./routes/routes");
 
 
-const { applicationPort, AppSecretKey } = config;
+const { applicationPort, } = config;
 const {router} = importRouter;
 
 
