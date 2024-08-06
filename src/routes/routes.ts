@@ -1,6 +1,5 @@
-import { Router } from "express";
-
-import express from 'express';
+const express = require('express');
+const router = express.Router();
 import registrationController from '../controllers/auth/registrationController';
 import {login, signOutUser} from "../controllers/auth/loginController";
 import { dashboardIndex } from "../controllers/internalControllers/dashboardController";
@@ -12,8 +11,6 @@ import resetPasswordMiddleware from "../middlewares/auth/resetPasswordMiddleware
 import resetPassword from "../controllers/auth/resetPasswordController";
 import sendResetEmail from "../controllers/auth/sendResetEmailController";
 import verifyEmail from "../controllers/auth/emailVerificationController";
-import authEmailResponseMiddleware from "../middlewares/auth/authEmailResponseMiddleware";
-const router:Router = express.Router();
 
 //check if email already exists
 //router.get('get/check/{email}', loginController);
@@ -36,4 +33,4 @@ router.get('/user/sign-out', isAuthenticated, signOutUser);
 
 //User dashboard
 router.get('/get/user/dashboard', isAuthenticated, dashboardIndex);
-export default router;
+module.exports = {router};

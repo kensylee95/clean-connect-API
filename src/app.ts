@@ -6,7 +6,7 @@ const importRouter = require("./routes/routes");
 
 
 const { applicationPort, AppSecretKey } = config;
-const {router} = importRouter; ;
+const {router} = importRouter;
 
 
 // Set up express-session middleware
