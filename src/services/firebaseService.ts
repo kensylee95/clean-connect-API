@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore} from 'firebase/firestore';
 import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
-import { firebaseConfig } from "../../config";
+import { firebaseConfig } from "../config";
 
 //initialize the firebase SDK
 const app = initializeApp(firebaseConfig);

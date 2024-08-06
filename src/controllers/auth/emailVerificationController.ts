@@ -1,5 +1,5 @@
 import { Request, Response,} from "express";
-import { applicationRootUrl } from "../../../config";
+import { applicationRootUrl } from "../../config";
 import { applyActionCode } from "firebase/auth";
 import { firebaseAuth } from "../../services/firebaseService";
 import { loginRedirectUrl } from "../../constants/urlLinks";
