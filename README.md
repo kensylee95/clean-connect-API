@@ -3,7 +3,7 @@
 
 #### Base URL
 ```
-https://cleanconnectapi.onrender.com
+https://cleanconnectapi.onrender.com/api
 ```
 
 #### User Registration and Authentication Flow
