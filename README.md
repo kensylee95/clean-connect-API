@@ -3,29 +3,6 @@
 
 #### Base URL
 ```
-https://cleanconnectapi.onrender.com/api
-```
-
-#### Endpoints
-
-1. **User Registration**
-   - **Endpoint**: `/post/register/user`
-   - **Method**: `POST`
-   - **Description**: Registers a new user, sends a verification email, and saves the user's information.
-   - **Request Body**:
-     ```json
-     {
-       "fullName": "string",
-       "email": "string",
-       "password": "string",
-       "phoneNumber": "string",
-       "role": "string"  // "admin", "provider", "customer"
-     }
-     ```
-   - **Responses**:### CEAN CONNECT Authentication API Overview (User Flow)
-
-#### Base URL
-```
 http://localhost:8000/api
 ```
 
