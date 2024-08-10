@@ -21,10 +21,6 @@ const registrationMiddleware = [
     (0, express_validator_1.body)('password')
         .notEmpty().withMessage("Password is required")
         .isLength({ min: 6 }).withMessage("Password must exceed 6 characters"),
-    //Confirm password validation
-    (0, express_validator_1.body)('confirmPassword')
-        .exists().withMessage('confirm password is required')
-        .custom((value, { req }) => value === req.body.password).withMessage("Passwords must match"),
     // Middleware to handle the validatio results
     (req, res, next) => {
         const errors = (0, express_validator_1.validationResult)(req);
