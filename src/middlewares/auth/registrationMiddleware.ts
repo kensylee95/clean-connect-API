@@ -21,10 +21,12 @@ const registrationMiddleware = [
     body('password')
     .notEmpty().withMessage("Password is required")
     .isLength({min:6}).withMessage("Password must exceed 6 characters"),
+    
     //Confirm password validation
-    body('confirmPassword')
+    /*body('confirmPassword')
     .exists().withMessage('confirm password is required')
     .custom((value, {req})=>value === req.body.password).withMessage("Passwords must match"),
+    */
 
 
      // Middleware to handle the validatio results
